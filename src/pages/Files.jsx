@@ -45,14 +45,15 @@ function NewFolderModal({ onClose, onCreate }) {
             required
           />
           <div className="flex gap-3">
-            <button type="button" onClick={onClose} className="btn btn-secondary flex-1">
+            <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm bg-[var(--color-background)] hover:bg-slate-200 text-[var(--color-text-light)] transition-all">
               Batal
             </button>
             <button
               id="create-folder-submit"
               type="submit"
               disabled={!name.trim() || loading}
-              className="btn btn-primary flex-1"
+              className="flex-1 h-12 rounded-xl font-bold text-sm text-white shadow-md transition-all active:scale-95 disabled:opacity-50"
+              style={{ background: 'linear-gradient(135deg, #14b8a6, #0d9488)' }}
             >
               {loading ? 'Membuat...' : 'Buat'}
             </button>
@@ -98,14 +99,15 @@ function RenameModal({ item, onClose, onRename }) {
             required
           />
           <div className="flex gap-3">
-            <button type="button" onClick={onClose} className="btn btn-secondary flex-1">
+            <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm bg-[var(--color-background)] hover:bg-slate-200 text-[var(--color-text-light)] transition-all">
               Batal
             </button>
             <button
               id="rename-submit"
               type="submit"
-              disabled={!name.trim() || name === item?.name || loading}
-              className="btn btn-primary flex-1"
+              disabled={!name.trim() || name === item.name || loading}
+              className="flex-1 h-12 rounded-xl font-bold text-sm text-white shadow-md transition-all active:scale-95 disabled:opacity-50"
+              style={{ background: 'linear-gradient(135deg, #14b8a6, #0d9488)' }}
             >
               {loading ? 'Menyimpan...' : 'Simpan'}
             </button>
@@ -141,14 +143,14 @@ function DeleteModal({ item, onClose, onDelete }) {
           Hapus <span className="font-semibold text-[#0f172a]">"{item?.name}"</span>? Tindakan ini tidak bisa dibatalkan.
         </p>
         <div className="flex gap-3">
-          <button type="button" onClick={onClose} className="btn btn-secondary flex-1">
+          <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm bg-[var(--color-background)] hover:bg-slate-200 text-[var(--color-text-light)] transition-all">
             Batal
           </button>
           <button
             id="delete-confirm"
             onClick={handleDelete}
             disabled={loading}
-            className="btn btn-danger flex-1"
+            className="flex-1 h-12 rounded-xl font-bold text-sm text-white shadow-md transition-all active:scale-95 disabled:opacity-50 bg-red-500 hover:bg-red-600"
           >
             {loading ? 'Menghapus...' : 'Hapus'}
           </button>
@@ -269,35 +271,42 @@ export default function Files() {
             {loading ? '...' : `${folders.length} folder, ${fileItems.length} file`}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex bg-[var(--color-background)] rounded-lg p-0.5 border border-[var(--color-border)]">
+        <div className="flex items-center gap-2 md:gap-3">
+          <div className="flex bg-[var(--color-background)] rounded-lg p-1 border border-[var(--color-border)] shadow-inner">
             <button
               onClick={() => toggleViewMode('grid')}
-              className={`p-1.5 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-white shadow-sm text-[var(--color-primary-600)]' : 'text-[var(--color-muted)] hover:text-[var(--color-text)]'}`}
+              className={`p-2 rounded-md transition-all duration-200 ${viewMode === 'grid' ? 'bg-white shadow-sm text-teal-600 scale-105' : 'text-slate-400 hover:text-slate-600'}`}
+              title="Grid View"
             >
-              <Squares2X2Icon className="w-4 h-4" />
+              <Squares2X2Icon className="w-5 h-5" strokeWidth={2} />
             </button>
             <button
               onClick={() => toggleViewMode('list')}
-              className={`p-1.5 rounded-md transition-colors ${viewMode === 'list' ? 'bg-white shadow-sm text-[var(--color-primary-600)]' : 'text-[var(--color-muted)] hover:text-[var(--color-text)]'}`}
+              className={`p-2 rounded-md transition-all duration-200 ${viewMode === 'list' ? 'bg-white shadow-sm text-teal-600 scale-105' : 'text-slate-400 hover:text-slate-600'}`}
+              title="List View"
             >
-              <Bars4Icon className="w-4 h-4" />
+              <Bars4Icon className="w-5 h-5" strokeWidth={2.5} />
             </button>
           </div>
           <button
             onClick={refresh}
             disabled={loading}
-            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-[var(--color-background)] transition-colors text-[var(--color-muted)]"
+            className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[var(--color-background)] transition-colors text-slate-400 hover:text-slate-600"
+            title="Refresh"
           >
-            <ArrowPathIcon className={`w-5 h-5 ${loading ? 'animate-spin-slow' : ''}`} />
+            <ArrowPathIcon className={`w-5 h-5 ${loading ? 'animate-spin-slow' : ''}`} strokeWidth={2} />
           </button>
           <button
             id="new-folder-btn"
             onClick={() => setShowNewFolder(true)}
-            className="btn btn-primary h-9 px-3.5 text-sm gap-1.5"
+            className="flex items-center justify-center gap-2 h-10 px-5 text-white rounded-xl font-bold text-sm shadow-[0_4px_14px_0_rgba(20,184,166,0.3)] hover:shadow-[0_6px_20px_rgba(20,184,166,0.4)] transition-all active:scale-95"
+            style={{
+              background: 'linear-gradient(135deg, #14b8a6, #0d9488)',
+              border: '1px solid rgba(255, 255, 255, 0.2)'
+            }}
           >
-            <FolderPlusIcon className="w-4 h-4" />
-            Folder
+            <FolderPlusIcon className="w-5 h-5 text-white" strokeWidth={2.5} />
+            <span>Folder Baru</span>
           </button>
         </div>
       </div>
