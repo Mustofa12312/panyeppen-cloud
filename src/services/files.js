@@ -81,3 +81,9 @@ export async function search(query, path = '/') {
     lastModified: new Date(item.lastModified)
   }))
 }
+
+// 9. Get Storage Info
+export async function getStorageInfo() {
+  const response = await axios.get('/api/storage')
+  return response.data
+}

@@ -244,6 +244,38 @@ app.get('/api/files/search', async (req, res) => {
   }
 })
 
+// 9. Storage Quota
+app.get('/api/storage', async (req, res) => {
+  try {
+    let totalSize = 0;
+    
+    async function calculateSize(dirPath) {
+      const items = await fs.readdir(dirPath);
+      for (const itemName of items) {
+        const itemPath = path.join(dirPath, itemName);
+        const stats = await fs.stat(itemPath);
+        if (stats.isDirectory()) {
+          await calculateSize(itemPath);
+        } else {
+          totalSize += stats.size;
+        }
+      }
+    }
+    
+    if (fs.existsSync(STORAGE_DIR)) {
+      await calculateSize(STORAGE_DIR);
+    }
+    
+    res.json({
+      used: totalSize,
+      total: 50 * 1024 * 1024 * 1024 // 50GB limit
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+})
+
 // ---------------------------------------------------------
 // Production Static File Serving
 // ---------------------------------------------------------

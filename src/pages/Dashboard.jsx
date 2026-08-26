@@ -12,7 +12,7 @@ import StorageCard from '../components/StorageCard'
 import FileCard from '../components/FileCard'
 import FolderCard from '../components/FolderCard'
 import EmptyState from '../components/EmptyState'
-import { list, download, deleteItem, rename } from '../services/files'
+import { list, download, deleteItem, rename, getStorageInfo } from '../services/files'
 import { refreshUser } from '../services/auth'
 
 function getGreeting() {
@@ -28,6 +28,7 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const [recentFiles, setRecentFiles] = useState([])
   const [recentFolders, setRecentFolders] = useState([])
+  const [storageInfo, setStorageInfo] = useState({ used: 0, total: 0 })
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -40,6 +41,9 @@ export default function Dashboard() {
       const files = items.filter((i) => !i.isFolder).slice(0, 5)
       setRecentFolders(folders)
       setRecentFiles(files)
+      
+      const storage = await getStorageInfo()
+      setStorageInfo(storage)
     } catch {
       // Silent fail
     } finally {
@@ -189,8 +193,8 @@ export default function Dashboard() {
 
       {/* Storage Card */}
       <StorageCard
-        used={user?.quota?.used || 0}
-        total={user?.quota?.total || 0}
+        used={storageInfo.used}
+        total={storageInfo.total}
       />
 
       {/* Quick Actions */}
