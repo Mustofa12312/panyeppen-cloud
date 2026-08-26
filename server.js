@@ -252,9 +252,11 @@ if (fs.existsSync(distPath)) {
   console.log('[INIT] Serving static files from dist/')
   app.use(express.static(distPath))
   // Fallback for React Router
-  app.get('*', (req, res) => {
+  app.use((req, res, next) => {
     if (!req.path.startsWith('/api/')) {
       res.sendFile(path.join(distPath, 'index.html'))
+    } else {
+      next()
     }
   })
 } else {
