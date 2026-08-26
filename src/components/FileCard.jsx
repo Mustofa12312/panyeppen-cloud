@@ -96,14 +96,14 @@ export default function FileCard({ file, onDelete, onRename, onDownload }) {
         </button>
 
           {menuOpen && (
-            <div className="absolute right-0 top-10 w-48 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-[var(--color-glass-border)] z-30 overflow-hidden animate-fade-in">
-              <div className="py-1">
-                <MenuBtn icon={<EyeIcon className="w-4 h-4" />} label="Buka / Preview" onClick={() => handleMenuAction('open')} />
-                <MenuBtn icon={<ArrowDownTrayIcon className="w-4 h-4" />} label="Download" onClick={() => handleMenuAction('download')} />
-                <MenuBtn icon={<PencilIcon className="w-4 h-4" />} label="Rename" onClick={() => handleMenuAction('rename')} />
-                <MenuBtn icon={<ShareIcon className="w-4 h-4" />} label="Share" onClick={() => handleMenuAction('share')} />
-                <div className="h-px bg-[var(--color-border)] my-1 opacity-50" />
-                <MenuBtn icon={<TrashIcon className="w-4 h-4" />} label="Hapus" onClick={() => handleMenuAction('delete')} danger />
+            <div className="absolute right-0 top-10 w-56 bg-white/70 backdrop-blur-3xl rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-white/60 z-30 animate-fade-in p-2">
+              <div className="flex flex-col gap-1">
+                <MenuBtn icon={<EyeIcon className="w-[18px] h-[18px]" />} iconColor="text-blue-600" iconBg="bg-blue-100/50" label="Buka / Preview" onClick={() => handleMenuAction('open')} />
+                <MenuBtn icon={<ArrowDownTrayIcon className="w-[18px] h-[18px]" />} iconColor="text-emerald-600" iconBg="bg-emerald-100/50" label="Download" onClick={() => handleMenuAction('download')} />
+                <MenuBtn icon={<PencilIcon className="w-[18px] h-[18px]" />} iconColor="text-amber-600" iconBg="bg-amber-100/50" label="Rename" onClick={() => handleMenuAction('rename')} />
+                <MenuBtn icon={<ShareIcon className="w-[18px] h-[18px]" />} iconColor="text-purple-600" iconBg="bg-purple-100/50" label="Share" onClick={() => handleMenuAction('share')} />
+                <div className="h-px bg-slate-200/80 my-0.5 mx-2" />
+                <MenuBtn icon={<TrashIcon className="w-[18px] h-[18px]" />} iconColor="text-red-600" iconBg="bg-red-100/50" label="Hapus" onClick={() => handleMenuAction('delete')} danger />
               </div>
             </div>
           )}
@@ -124,17 +124,19 @@ export default function FileCard({ file, onDelete, onRename, onDownload }) {
   )
 }
 
-function MenuBtn({ icon, label, onClick, danger = false }) {
+function MenuBtn({ icon, iconColor, iconBg, label, onClick, danger = false }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors ${
+      className={`w-full flex items-center gap-3 px-3 py-2 rounded-2xl text-[13px] font-bold transition-all duration-200 group/btn ${
         danger
-          ? 'text-[var(--color-danger)] hover:bg-red-50'
-          : 'text-[var(--color-text)] hover:bg-[var(--color-background)]'
+          ? 'text-red-600 hover:bg-red-50 hover:text-red-700'
+          : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
       }`}
     >
-      <span className={danger ? 'text-[var(--color-danger)]' : 'text-[var(--color-muted)]'}>{icon}</span>
+      <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors shadow-sm border border-white/50 ${iconBg} ${iconColor} group-hover/btn:scale-110`}>
+        {icon}
+      </div>
       {label}
     </button>
   )

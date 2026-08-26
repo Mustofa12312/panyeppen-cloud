@@ -63,23 +63,27 @@ export default function FolderCard({ folder, onDelete, onRename }) {
 
           {menuOpen && (
             <div
-              className="absolute right-0 top-10 w-40 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-[var(--color-glass-border)] z-30 overflow-hidden animate-fade-in"
+              className="absolute right-0 top-10 w-44 bg-white/70 backdrop-blur-3xl rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-white/60 z-30 animate-fade-in p-2"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="py-1">
+              <div className="flex flex-col gap-1">
                 <button
                   onClick={() => handleMenuAction('rename')}
-                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-background)] transition-colors"
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-2xl text-[13px] font-bold transition-all duration-200 group/btn text-slate-700 hover:bg-slate-100 hover:text-slate-900"
                 >
-                  <PencilIcon className="w-4 h-4 text-[var(--color-muted)]" />
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors shadow-sm border border-white/50 bg-amber-100/50 text-amber-600 group-hover/btn:scale-110">
+                    <PencilIcon className="w-[18px] h-[18px]" />
+                  </div>
                   Rename
                 </button>
-                <div className="h-px bg-[var(--color-border)] my-1 opacity-50" />
+                <div className="h-px bg-slate-200/80 my-0.5 mx-2" />
                 <button
                   onClick={() => handleMenuAction('delete')}
-                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-[var(--color-danger)] hover:bg-red-50 transition-colors"
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-2xl text-[13px] font-bold transition-all duration-200 group/btn text-red-600 hover:bg-red-50 hover:text-red-700"
                 >
-                  <TrashIcon className="w-4 h-4 text-[var(--color-danger)]" />
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors shadow-sm border border-white/50 bg-red-100/50 text-red-600 group-hover/btn:scale-110">
+                    <TrashIcon className="w-[18px] h-[18px]" />
+                  </div>
                   Hapus
                 </button>
               </div>
