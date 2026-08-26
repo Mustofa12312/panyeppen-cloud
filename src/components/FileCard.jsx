@@ -1,0 +1,143 @@
+import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import {
+  EllipsisVerticalIcon,
+  ArrowDownTrayIcon,
+  PencilIcon,
+  TrashIcon,
+  ShareIcon,
+  EyeIcon,
+} from '@heroicons/react/24/outline'
+import FilePreviewModal from './FilePreviewModal'
+import { formatFileSize } from '../utils/formatFileSize'
+import { formatRelativeDate } from '../utils/formatDate'
+import { getFileType } from '../utils/fileTypes'
+
+function FileIcon({ filename, size = 'md' }) {
+  const type = getFileType(filename)
+  const dim = size === 'lg' ? 'w-12 h-12' : 'w-10 h-10'
+  const textSize = size === 'lg' ? 'text-[0.5rem]' : 'text-[0.5rem]'
+
+  return (
+    <div
+      className={`${dim} rounded-xl flex items-center justify-center flex-shrink-0 font-bold ${textSize} uppercase tracking-widest shadow-sm group-hover:scale-105 transition-transform duration-300 border`}
+      style={{ backgroundColor: type.bg, color: type.color, borderColor: `${type.color}30` }}
+    >
+      {type.label.slice(0, 3)}
+    </div>
+  )
+}
+
+export default function FileCard({ file, onDelete, onRename, onDownload }) {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [showPreview, setShowPreview] = useState(false)
+  const menuRef = useRef(null)
+  const navigate = useNavigate()
+
+  const handleMenuAction = (action) => {
+    setMenuOpen(false)
+    switch (action) {
+      case 'open':
+        setShowPreview(true)
+        break
+      case 'download':
+        onDownload?.(file)
+        break
+      case 'rename':
+        onRename?.(file)
+        break
+      case 'delete':
+        onDelete?.(file)
+        break
+      case 'share':
+        // Phase 4
+        break
+      default:
+        break
+    }
+  }
+
+  // Close menu when clicking outside
+  const handleBlur = (e) => {
+    if (!menuRef.current?.contains(e.relatedTarget)) {
+      setMenuOpen(false)
+    }
+  }
+
+  return (
+    <>
+      <div 
+        className="card glass flex items-center gap-3.5 px-4 py-3.5 animate-fade-in cursor-pointer group"
+        onClick={() => setShowPreview(true)}
+      >
+        <FileIcon filename={file.name} />
+
+      <div className="flex-1 min-w-0">
+        <p className="font-bold text-sm text-[var(--color-text)] truncate tracking-wide">{file.name}</p>
+        <div className="flex items-center gap-2 mt-0.5">
+          <span className="text-[11px] font-medium text-[var(--color-text-light)]">{formatFileSize(file.size)}</span>
+          <span className="text-[var(--color-border)] text-[10px]">●</span>
+          <span className="text-[11px] font-medium text-[var(--color-text-light)]">{formatRelativeDate(file.lastModified)}</span>
+        </div>
+      </div>
+
+        {/* Menu button */}
+        <div className="relative" ref={menuRef} onBlur={handleBlur} onClick={(e) => e.stopPropagation()}>
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              setMenuOpen(!menuOpen)
+            }}
+          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--color-background)] transition-colors text-[var(--color-muted)] group-hover:text-[var(--color-text-light)] opacity-0 group-hover:opacity-100 focus:opacity-100"
+          aria-label={`Menu untuk ${file.name}`}
+          aria-expanded={menuOpen}
+        >
+          <EllipsisVerticalIcon className="w-5 h-5" />
+        </button>
+
+          {menuOpen && (
+            <div className="absolute right-0 top-10 w-48 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-[var(--color-glass-border)] z-30 overflow-hidden animate-fade-in">
+              <div className="py-1">
+                <MenuBtn icon={<EyeIcon className="w-4 h-4" />} label="Buka / Preview" onClick={() => handleMenuAction('open')} />
+                <MenuBtn icon={<ArrowDownTrayIcon className="w-4 h-4" />} label="Download" onClick={() => handleMenuAction('download')} />
+                <MenuBtn icon={<PencilIcon className="w-4 h-4" />} label="Rename" onClick={() => handleMenuAction('rename')} />
+                <MenuBtn icon={<ShareIcon className="w-4 h-4" />} label="Share" onClick={() => handleMenuAction('share')} />
+                <div className="h-px bg-[var(--color-border)] my-1 opacity-50" />
+                <MenuBtn icon={<TrashIcon className="w-4 h-4" />} label="Hapus" onClick={() => handleMenuAction('delete')} danger />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {showPreview && (
+        <FilePreviewModal
+          file={file}
+          onClose={() => setShowPreview(false)}
+          onDownload={(f) => {
+            setShowPreview(false)
+            onDownload?.(f)
+          }}
+        />
+      )}
+    </>
+  )
+}
+
+function MenuBtn({ icon, label, onClick, danger = false }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors ${
+        danger
+          ? 'text-[var(--color-danger)] hover:bg-red-50'
+          : 'text-[var(--color-text)] hover:bg-[var(--color-background)]'
+      }`}
+    >
+      <span className={danger ? 'text-[var(--color-danger)]' : 'text-[var(--color-muted)]'}>{icon}</span>
+      {label}
+    </button>
+  )
+}
+
+export { FileIcon }
