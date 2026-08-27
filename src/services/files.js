@@ -98,6 +98,17 @@ export async function createShareLink(path, password = '', expiresInDays = '') {
   return response.data // { shareId, url }
 }
 
+// 10b. Get All Shares
+export async function getShares() {
+  const response = await api.get('/shares')
+  return response.data
+}
+
+// 10c. Revoke Share
+export async function revokeShare(shareId) {
+  await api.delete(`/shares/${shareId}`)
+}
+
 // 11. Download ZIP
 export async function downloadZip(paths, filename = 'Download.zip') {
   const response = await api.post('/files/zip', { paths }, {

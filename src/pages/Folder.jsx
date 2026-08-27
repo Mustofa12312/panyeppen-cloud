@@ -226,6 +226,8 @@ export default function Folder() {
   const [sortBy, setSortBy] = useState('name-asc')
   const [selectedItems, setSelectedItems] = useState([])
   const [showBulkDelete, setShowBulkDelete] = useState(false)
+  
+  const [categoryFilter, setCategoryFilter] = useState('all')
 
   // Sort logic
   const sortFunc = (a, b) => {
@@ -239,7 +241,17 @@ export default function Folder() {
   }
 
   const sortedFolders = useMemo(() => [...folders].sort(sortFunc), [folders, sortBy])
-  const sortedFiles = useMemo(() => [...fileItems].sort(sortFunc), [fileItems, sortBy])
+  const sortedFiles = useMemo(() => {
+    let filtered = [...fileItems]
+    if (categoryFilter !== 'all') {
+      const extMatch = (file, exts) => exts.some(ext => file.name.toLowerCase().endsWith(ext))
+      if (categoryFilter === 'image') filtered = filtered.filter(f => extMatch(f, ['.jpg', '.jpeg', '.png', '.gif', '.webp']))
+      else if (categoryFilter === 'document') filtered = filtered.filter(f => extMatch(f, ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.txt', '.csv']))
+      else if (categoryFilter === 'video') filtered = filtered.filter(f => extMatch(f, ['.mp4', '.webm', '.mkv', '.avi']))
+      else if (categoryFilter === 'audio') filtered = filtered.filter(f => extMatch(f, ['.mp3', '.wav', '.ogg']))
+    }
+    return filtered.sort(sortFunc)
+  }, [fileItems, sortBy, categoryFilter])
 
   const toggleViewMode = (mode) => {
     setViewMode(mode)
@@ -379,6 +391,31 @@ export default function Folder() {
             </button>
           </div>
         </div>
+        
+        {/* Quick Category Filters */}
+        {folderPath === '/' && (
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 mt-2 scrollbar-hide">
+            {[
+              { id: 'all', label: 'Semua' },
+              { id: 'image', label: 'Gambar' },
+              { id: 'document', label: 'Dokumen' },
+              { id: 'video', label: 'Video' },
+              { id: 'audio', label: 'Audio' }
+            ].map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setCategoryFilter(cat.id)}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+                  categoryFilter === cat.id 
+                    ? 'bg-teal-600 text-white shadow-md' 
+                    : 'bg-white text-slate-500 hover:bg-slate-100 hover:text-slate-700 border border-slate-200'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {error && <div className="bg-red-50 border border-red-200 rounded-xl p-3.5"><p className="text-sm text-red-600">{error}</p></div>}

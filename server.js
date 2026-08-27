@@ -42,15 +42,27 @@ const authenticateToken = (req, res, next) => {
   })
 }
 
+// Helper to get unique filename (e.g. file (1).jpg)
+function getUniqueFilename(dir, originalName) {
+  let name = originalName
+  let ext = path.extname(originalName)
+  let base = path.basename(originalName, ext)
+  let counter = 1
+  
+  while (fs.existsSync(path.join(dir, name))) {
+    name = `${base} (${counter})${ext}`
+    counter++
+  }
+  return name
+}
+
 // Multer setup for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // Note: req.user is populated by authenticateToken before multer runs
     const userStoragePath = path.join(STORAGE_DIR, req.user.username)
     const targetPath = req.query.path || '/'
-    const fullPath = path.join(userStoragePath, targetPath)
     
-    // Check path traversal
     const normalizedPath = path.normalize(targetPath).replace(/^(\.\.[\/\\])+/, '')
     const safePath = path.join(userStoragePath, normalizedPath)
     if (!safePath.startsWith(userStoragePath)) {
@@ -58,10 +70,12 @@ const storage = multer.diskStorage({
     }
     
     fs.ensureDirSync(safePath)
+    req.uploadDestination = safePath // pass to filename
     cb(null, safePath)
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname)
+    const uniqueName = getUniqueFilename(req.uploadDestination, file.originalname)
+    cb(null, uniqueName)
   }
 })
 const upload = multer({ storage })
@@ -212,10 +226,12 @@ app.post('/api/files/folder', authenticateToken, async (req, res) => {
     if (!folderName) return res.status(400).json({ error: 'Folder name required' })
     
     const { safePath, relativePath } = getSafePath(req.user.username, reqPath)
-    const newFolderPath = path.join(safePath, folderName)
+    
+    const uniqueFolderName = getUniqueFilename(safePath, folderName)
+    const newFolderPath = path.join(safePath, uniqueFolderName)
     
     await fs.ensureDir(newFolderPath)
-    const finalRelativePath = path.join(relativePath, folderName).replace(/\\/g, '/')
+    const finalRelativePath = path.join(relativePath, uniqueFolderName).replace(/\\/g, '/')
     
     res.json({ message: 'Folder created', path: finalRelativePath.startsWith('/') ? finalRelativePath : `/${finalRelativePath}` })
   } catch (err) {
@@ -237,7 +253,8 @@ app.put('/api/files/rename', authenticateToken, async (req, res) => {
     }
     
     const parentDir = path.dirname(oldSafePath)
-    const newSafePath = path.join(parentDir, newName)
+    const uniqueNewName = getUniqueFilename(parentDir, newName)
+    const newSafePath = path.join(parentDir, uniqueNewName)
     
     await fs.rename(oldSafePath, newSafePath)
     
@@ -565,6 +582,30 @@ app.post('/api/shares', authenticateToken, async (req, res) => {
     )
     
     res.json({ shareId, url: `/shared/${shareId}` })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// 10b. Get All Shares for Current User
+app.get('/api/shares', authenticateToken, async (req, res) => {
+  try {
+    const db = await getDb()
+    const shares = await db.all('SELECT id, file_path, expires_at, created_at, password_hash IS NOT NULL as has_password FROM shares WHERE user_id = ? ORDER BY created_at DESC', [req.user.id])
+    res.json(shares)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// 10c. Delete a Share
+app.delete('/api/shares/:shareId', authenticateToken, async (req, res) => {
+  try {
+    const db = await getDb()
+    await db.run('DELETE FROM shares WHERE id = ? AND user_id = ?', [req.params.shareId, req.user.id])
+    res.json({ message: 'Tautan dibatalkan' })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: err.message })
