@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-// Base URL ke Nextcloud via Vite proxy
-const BASE_URL = '/nextcloud'
+// Base URL ke API kita sendiri
+const BASE_URL = '/api'
 
 /**
- * Membuat Axios instance untuk Nextcloud WebDAV
+ * Membuat Axios instance untuk API backend
  */
 const createApiInstance = () => {
   const instance = axios.create({
@@ -12,12 +12,12 @@ const createApiInstance = () => {
     timeout: 30000,
   })
 
-  // Request interceptor — inject Basic Auth header
+  // Request interceptor — inject Bearer Auth header
   instance.interceptors.request.use(
     (config) => {
       const token = sessionStorage.getItem('nc_token')
       if (token) {
-        config.headers['Authorization'] = `Basic ${token}`
+        config.headers['Authorization'] = `Bearer ${token}`
       }
       return config
     },
@@ -42,26 +42,3 @@ const createApiInstance = () => {
 }
 
 export const api = createApiInstance()
-
-/**
- * Helper: encode credentials ke Base64 untuk Basic Auth
- */
-export function encodeCredentials(username, password) {
-  return btoa(`${username}:${password}`)
-}
-
-/**
- * Helper: parse XML WebDAV response
- */
-export function parseWebDAVResponse(xmlString) {
-  const parser = new DOMParser()
-  return parser.parseFromString(xmlString, 'application/xml')
-}
-
-/**
- * Helper: extract value dari element WebDAV
- */
-export function getXmlValue(doc, tagName, ns = '') {
-  const el = doc.querySelector(tagName) || doc.getElementsByTagNameNS('*', tagName.split(':').pop())[0]
-  return el?.textContent?.trim() || ''
-}

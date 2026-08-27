@@ -1,104 +1,37 @@
-import axios from 'axios'
-import { encodeCredentials } from './api'
-
-const BASE_URL = '/nextcloud'
+import { api } from './api'
 
 /**
- * Login ke Nextcloud menggunakan Basic Auth
- * Validasi dengan PROPFIND ke WebDAV endpoint user
+ * Login ke backend
  */
 export async function login(username, password) {
-  const token = encodeCredentials(username, password)
-
-  // MOCK LOGIN: Bypassing server connection for UI testing
-  console.log("Mocking login for:", username);
-  const mockUser = {
-    id: username,
-    displayName: username === 'admin' ? 'Administrator' : username,
-    email: `${username}@example.com`,
-    quota: { used: 15485760, total: 10737418240, free: 10721932480, relative: 1.5 },
-  }
-  sessionStorage.setItem('nc_token', token)
-  sessionStorage.setItem('nc_user', JSON.stringify(mockUser))
-  return { success: true, user: mockUser }
-
-  /* Original code below (commented out for now):
   try {
-    // Test credentials via WebDAV PROPFIND
-    const response = await axios.request({
-      method: 'PROPFIND',
-      url: `${BASE_URL}/remote.php/dav/files/${username}/`,
-      headers: {
-        Authorization: `Basic ${token}`,
-        Depth: '0',
-        'Content-Type': 'application/xml',
-      },
-      data: `<?xml version="1.0" encoding="utf-8"?>
-        <D:propfind xmlns:D="DAV:">
-          <D:prop>
-            <D:displayname/>
-          </D:prop>
-        </D:propfind>`,
-    })
+    const response = await api.post('/auth/login', { username, password })
+    const { token, user } = response.data
 
-    if (response.status === 207 || response.status === 200) {
-      // Ambil info user via OCS API
-      const userInfo = await getUserInfo(username, token)
-
-      // Simpan ke sessionStorage (bukan localStorage untuk keamanan)
-      sessionStorage.setItem('nc_token', token)
-      sessionStorage.setItem('nc_user', JSON.stringify(userInfo))
-
-      return { success: true, user: userInfo }
-    }
+    sessionStorage.setItem('nc_token', token)
+    sessionStorage.setItem('nc_user', JSON.stringify(user))
+    
+    return { success: true, user }
   } catch (error) {
-    if (error.response?.status === 401) {
-      throw new Error('Username atau password salah')
-    }
-    if (error.response?.status === 404) {
-      throw new Error('User tidak ditemukan')
+    if (error.response?.data?.error) {
+      throw new Error(error.response.data.error)
     }
     throw new Error('Gagal terhubung ke server. Coba lagi.')
   }
-  */
 }
 
 /**
- * Ambil info user dari OCS API
+ * Register akun baru
  */
-async function getUserInfo(username, token) {
+export async function register(username, password, displayName) {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/ocs/v1.php/cloud/users/${username}`,
-      {
-        headers: {
-          Authorization: `Basic ${token}`,
-          'OCS-APIRequest': 'true',
-          Accept: 'application/json',
-        },
-      }
-    )
-
-    const data = response.data?.ocs?.data
-    return {
-      id: username,
-      displayName: data?.displayname || username,
-      email: data?.email || '',
-      quota: {
-        used: data?.quota?.used || 0,
-        total: data?.quota?.quota || 0,
-        free: data?.quota?.free || 0,
-        relative: data?.quota?.relative || 0,
-      },
+    const response = await api.post('/auth/register', { username, password, displayName })
+    return response.data
+  } catch (error) {
+    if (error.response?.data?.error) {
+      throw new Error(error.response.data.error)
     }
-  } catch {
-    // Fallback jika OCS API tidak tersedia
-    return {
-      id: username,
-      displayName: username,
-      email: '',
-      quota: { used: 0, total: 0, free: 0, relative: 0 },
-    }
+    throw new Error('Gagal terhubung ke server. Coba lagi.')
   }
 }
 
@@ -131,14 +64,19 @@ export function isAuthenticated() {
 }
 
 /**
- * Refresh info user (quota, dll)
+ * Refresh info user
  */
 export async function refreshUser() {
   const user = getCurrentUser()
   const token = sessionStorage.getItem('nc_token')
   if (!user || !token) return null
 
-  const updated = await getUserInfo(user.id, token)
-  sessionStorage.setItem('nc_user', JSON.stringify(updated))
-  return updated
+  try {
+    const response = await api.get('/auth/me')
+    const updatedUser = response.data
+    sessionStorage.setItem('nc_user', JSON.stringify(updatedUser))
+    return updatedUser
+  } catch (error) {
+    return null
+  }
 }
