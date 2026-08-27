@@ -13,7 +13,7 @@ export default function DashboardLayout({ children, headerProps }) {
   }, [isCollapsed])
 
   return (
-    <div className="page flex flex-col md:flex-row bg-[#f8fafc]">
+    <div className="page flex flex-col md:flex-row bg-background">
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
         <Sidebar collapsed={isCollapsed} onToggle={() => setIsCollapsed(!isCollapsed)} />
