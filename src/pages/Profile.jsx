@@ -23,9 +23,12 @@ function MenuItem({ icon: Icon, label, description, onClick, danger = false }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-4 p-4 hover:bg-[#f8fafc] active:bg-[#f1f5f9] transition-colors rounded-2xl ${
+      className={`w-full flex items-center gap-4 p-4 transition-colors rounded-2xl ${
         danger ? 'text-[#dc2626]' : 'text-[#0f172a]'
       }`}
+      style={{ background: 'transparent' }}
+      onMouseEnter={(e) => e.currentTarget.style.background = danger ? '#fef2f2' : '#f8fafc'}
+      onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
     >
       <div
         className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
@@ -150,14 +153,16 @@ export default function Profile() {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowLogoutConfirm(false)}
-                className="btn btn-secondary flex-1"
+                className="flex-1 h-12 rounded-xl font-bold text-sm transition-all active:scale-[0.97]"
+                style={{ background: 'rgba(241,245,249,0.9)', color: '#475569' }}
               >
                 Batal
               </button>
               <button
                 id="logout-confirm"
                 onClick={handleLogout}
-                className="btn btn-danger flex-1"
+                className="flex-1 h-12 rounded-xl font-bold text-sm transition-all active:scale-[0.97]"
+                style={{ background: '#ef4444', color: 'white', boxShadow: '0 4px 14px rgba(239,68,68,0.3)' }}
               >
                 Keluar
               </button>

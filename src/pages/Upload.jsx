@@ -240,7 +240,11 @@ export default function Upload() {
                   {successCount} file berhasil diupload
                 </p>
               </div>
-              <button onClick={() => navigate('/files')} className="btn bg-white text-teal-700 border border-teal-300 hover:bg-teal-100 text-xs h-9 px-3.5">
+              <button
+                onClick={() => navigate('/files')}
+                className="h-9 px-4 rounded-lg text-xs font-bold transition-all active:scale-[0.97]"
+                style={{ background: 'white', color: '#0f766e', border: '1px solid #99f6e4' }}
+              >
                 Lihat File
               </button>
             </div>

@@ -60,7 +60,11 @@ export default function Trash() {
         </div>
         
         {items.length > 0 && (
-          <button onClick={() => handleDelete(null)} className="btn bg-red-50 text-red-600 hover:bg-red-100 border border-red-200">
+          <button
+            onClick={() => handleDelete(null)}
+            className="flex items-center gap-2 h-10 px-4 rounded-xl font-bold text-sm transition-all active:scale-[0.97]"
+            style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }}
+          >
             <TrashIcon className="w-4 h-4" />
             Kosongkan
           </button>
