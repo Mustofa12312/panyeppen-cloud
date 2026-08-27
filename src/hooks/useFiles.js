@@ -72,6 +72,7 @@ export function useFiles(initialPath = '/') {
     navigate,
     refresh,
     deleteFile,
+    bulkDeleteFiles,
     renameFile,
     createFolder,
     loadFiles,
