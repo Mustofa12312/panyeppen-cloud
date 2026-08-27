@@ -128,7 +128,14 @@ export default function Login() {
       </div>
 
       {/* Footer */}
-      <p className="text-center text-xs text-[#94a3b8] mt-8">
+      <p className="mt-8 text-center text-sm font-medium text-[#64748b]">
+        Belum punya akun?{' '}
+        <button onClick={() => navigate('/register')} className="font-bold text-[#16a34a] hover:text-[#15803d] hover:underline transition-all">
+          Daftar di sini
+        </button>
+      </p>
+      
+      <p className="text-center text-xs text-[#94a3b8] mt-4">
         Panyeppen Cloud © 2026
       </p>
     </div>

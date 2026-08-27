@@ -5,6 +5,7 @@ import DashboardLayout from '../layouts/DashboardLayout'
 import AuthLayout from '../layouts/AuthLayout'
 
 import Login from '../pages/Login'
+import Register from '../pages/Register'
 import Dashboard from '../pages/Dashboard'
 import Files from '../pages/Files'
 import Folder from '../pages/Folder'
@@ -50,19 +51,15 @@ function GuestRoute({ children }) {
 }
 
 export default function AppRoutes() {
+  const { isAuth: user } = useAuth()
+
   return (
     <Routes>
       {/* Auth Routes */}
-      <Route
-        path="/login"
-        element={
-          <GuestRoute>
-            <AuthLayout>
-              <Login />
-            </AuthLayout>
-          </GuestRoute>
-        }
-      />
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
+        <Route path="/register" element={user ? <Navigate to="/" replace /> : <Register />} />
+      </Route>
 
       {/* Protected Routes */}
       <Route
