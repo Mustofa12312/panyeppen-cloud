@@ -59,6 +59,11 @@ export async function deleteItem(path) {
   await api.delete('/files', { params: { path } })
 }
 
+// 5b. Bulk Delete items
+export async function bulkDelete(paths) {
+  await api.post('/files/bulk-delete', { paths })
+}
+
 // 6. Rename item
 export async function rename(oldPath, newName) {
   const response = await api.put('/files/rename', { oldPath, newName })

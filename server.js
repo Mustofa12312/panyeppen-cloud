@@ -265,6 +265,32 @@ app.delete('/api/files', authenticateToken, async (req, res) => {
   }
 })
 
+// 5b. Bulk Delete files/folders
+app.post('/api/files/bulk-delete', authenticateToken, async (req, res) => {
+  try {
+    const { paths } = req.body
+    if (!paths || !Array.isArray(paths)) {
+      return res.status(400).json({ error: 'Paths array required' })
+    }
+    
+    const userStoragePath = path.join(STORAGE_DIR, req.user.username)
+    let deletedCount = 0;
+
+    for (const p of paths) {
+      const { safePath } = getSafePath(req.user.username, p)
+      if (safePath !== userStoragePath && fs.existsSync(safePath)) {
+        await fs.remove(safePath)
+        deletedCount++
+      }
+    }
+    
+    res.json({ message: `Deleted ${deletedCount} items successfully` })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: err.message })
+  }
+})
+
 // 6. Download file
 app.get('/api/files/download', authenticateToken, (req, res) => {
   try {

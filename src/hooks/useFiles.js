@@ -42,6 +42,11 @@ export function useFiles(initialPath = '/') {
     setFiles((prev) => prev.filter((f) => f.path !== path))
   }, [])
 
+  const bulkDeleteFiles = useCallback(async (paths) => {
+    await filesService.bulkDelete(paths)
+    setFiles((prev) => prev.filter((f) => !paths.includes(f.path)))
+  }, [])
+
   const renameFile = useCallback(async (oldPath, newName) => {
     const newPath = await filesService.rename(oldPath, newName)
     await loadFiles(currentPath)
