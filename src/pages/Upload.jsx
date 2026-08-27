@@ -185,16 +185,16 @@ export default function Upload() {
         <div className="flex gap-4">
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 px-5 h-11 font-bold text-sm rounded-xl transition-colors shadow-sm"
-            style={{ background: 'white', color: '#0f766e', border: '2px solid #0d9488' }}
+            className="flex items-center gap-2 h-11 font-bold text-sm rounded-xl transition-colors shadow-sm"
+            style={{ background: 'white', color: '#0f766e', border: '2px solid #0d9488', padding: '0 1.25rem' }}
           >
             <DocumentPlusIcon className="w-5 h-5" />
             Pilih File
           </button>
           <button
             onClick={() => folderInputRef.current?.click()}
-            className="flex items-center gap-2 px-5 h-11 text-white font-bold text-sm rounded-xl transition-colors shadow-md"
-            style={{ background: '#0d9488' }}
+            className="flex items-center gap-2 h-11 text-white font-bold text-sm rounded-xl transition-colors shadow-md"
+            style={{ background: '#0d9488', padding: '0 1.25rem' }}
           >
             <FolderPlusIcon className="w-5 h-5" />
             Pilih Folder

@@ -90,7 +90,9 @@ body.dark {
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
 
 /* Remove default button styles — only reset border/padding, NOT background */
-button { cursor: pointer; border: none; padding: 0; font-family: inherit; }
+@layer base {
+  button { cursor: pointer; border: none; font-family: inherit; }
+}
 
 /* Safe area for mobile */
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
