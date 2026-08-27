@@ -7,7 +7,9 @@ import { fileURLToPath } from 'url'
 import mime from 'mime-types'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-import archiver from 'archiver'
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+const archiver = require('archiver')
 import crypto from 'crypto'
 import rateLimit from 'express-rate-limit'
 import { getDb } from './db.js'

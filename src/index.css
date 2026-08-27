@@ -2,24 +2,6 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-50: var(--color-primary-50);
-  --color-primary-100: var(--color-primary-100);
-  --color-primary-200: var(--color-primary-200);
-  --color-primary-300: var(--color-primary-300);
-  --color-primary-400: var(--color-primary-400);
-  --color-primary-500: var(--color-primary-500);
-  --color-primary-600: var(--color-primary-600);
-  --color-primary-700: var(--color-primary-700);
-  --color-primary-800: var(--color-primary-800);
-  --color-primary-900: var(--color-primary-900);
-
-  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --border-radius-card: 1.5rem;
-  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 0 3px rgba(0, 0, 0, 0.02);
-  --shadow-card-hover: 0 12px 32px -4px rgba(13, 148, 136, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
-}
-
-:root {
   --color-primary-50: #f0fdfa;
   --color-primary-100: #ccfbf1;
   --color-primary-200: #99f6e4;
@@ -31,6 +13,13 @@
   --color-primary-800: #115e59;
   --color-primary-900: #134e4a;
 
+  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --border-radius-card: 1.5rem;
+  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 0 3px rgba(0, 0, 0, 0.02);
+  --shadow-card-hover: 0 12px 32px -4px rgba(13, 148, 136, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+:root {
   --color-surface: rgba(255, 255, 255, 0.75);
   --color-surface-solid: #ffffff;
   --color-background: #f1f5f9;
@@ -100,8 +89,8 @@ body.dark {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
 
-/* Remove default button styles */
-button { cursor: pointer; border: none; background: none; padding: 0; font-family: inherit; }
+/* Remove default button styles — only reset border/padding, NOT background */
+button { cursor: pointer; border: none; padding: 0; font-family: inherit; }
 
 /* Safe area for mobile */
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
@@ -187,10 +176,11 @@ button { cursor: pointer; border: none; background: none; padding: 0; font-famil
     white-space: nowrap;
     user-select: none;
     letter-spacing: 0.01em;
+    background-color: transparent;
   }
   .btn-primary {
-    background: linear-gradient(135deg, #14b8a6, #0d9488);
-    color: white;
+    background: linear-gradient(135deg, #14b8a6, #0d9488) !important;
+    color: white !important;
     box-shadow: 0 4px 14px 0 rgba(20, 184, 166, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
@@ -201,27 +191,29 @@ button { cursor: pointer; border: none; background: none; padding: 0; font-famil
   .btn-primary:active { transform: scale(0.97); }
   
   .btn-secondary {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.7) !important;
     backdrop-filter: blur(8px);
-    color: var(--color-text);
+    color: var(--color-text) !important;
     border: 1px solid var(--color-glass-border);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   }
-  .btn-secondary:hover { background: rgba(255, 255, 255, 0.9); transform: translateY(-1px); }
+  .btn-secondary:hover { background: rgba(255, 255, 255, 0.9) !important; transform: translateY(-1px); }
   .btn-secondary:active { transform: scale(0.97); }
   
   .btn-danger {
-    background: #fef2f2;
-    color: #ef4444;
+    background: #fef2f2 !important;
+    color: #ef4444 !important;
+    border: 1px solid #fecaca;
   }
-  .btn-danger:active { background: #fee2e2; transform: scale(0.97); }
+  .btn-danger:hover { background: #fee2e2 !important; }
+  .btn-danger:active { background: #fecaca !important; transform: scale(0.97); }
   
   .btn-ghost {
-    background: transparent;
+    background: transparent !important;
     color: var(--color-text-light);
   }
-  .btn-ghost:hover { background: rgba(0, 0, 0, 0.03); color: var(--color-text); }
-  .btn-ghost:active { background: rgba(0, 0, 0, 0.06); }
+  .btn-ghost:hover { background: rgba(0, 0, 0, 0.03) !important; color: var(--color-text); }
+  .btn-ghost:active { background: rgba(0, 0, 0, 0.06) !important; }
 
   /* Input base */
   .input {
@@ -240,7 +232,7 @@ button { cursor: pointer; border: none; background: none; padding: 0; font-famil
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
   }
   .input:focus {
-    border-color: var(--color-primary-400);
+    border-color: #2dd4bf;
     box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.02);
     background: #ffffff;
   }
@@ -250,9 +242,9 @@ button { cursor: pointer; border: none; background: none; padding: 0; font-famil
   .modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 50;
     display: flex;
     align-items: flex-end;
@@ -264,7 +256,7 @@ button { cursor: pointer; border: none; background: none; padding: 0; font-famil
 
   /* Bottom sheet */
   .bottom-sheet {
-    background: var(--color-surface);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid var(--color-glass-border);
@@ -274,12 +266,12 @@ button { cursor: pointer; border: none; background: none; padding: 0; font-famil
     max-width: 420px;
     padding: 1rem 1.5rem 2rem;
     animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 -10px 40px -10px rgba(0,0,0,0.1);
+    box-shadow: 0 -10px 40px -10px rgba(0,0,0,0.15);
   }
   .bottom-sheet-handle {
     width: 40px;
     height: 5px;
-    background: var(--color-border);
+    background: #cbd5e1;
     border-radius: 3px;
     margin: 0 auto 1.5rem;
   }
@@ -288,7 +280,7 @@ button { cursor: pointer; border: none; background: none; padding: 0; font-famil
       border-radius: 1.5rem;
       border-bottom: 1px solid var(--color-glass-border);
       margin-bottom: 0;
-      box-shadow: var(--shadow-card-hover);
+      box-shadow: 0 25px 60px -15px rgba(0,0,0,0.2);
     }
   }
 
@@ -331,7 +323,7 @@ button { cursor: pointer; border: none; background: none; padding: 0; font-famil
   .badge {
     display: inline-flex;
     align-items: center;
-    padding: 0.125rem 0.5rem;
+    padding: 0.25rem 0.75rem;
     border-radius: 9999px;
     font-size: 0.6875rem;
     font-weight: 600;

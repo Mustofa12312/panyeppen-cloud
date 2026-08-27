@@ -1,4 +1,6 @@
-export default function AuthLayout({ children }) {
+import { Outlet } from 'react-router-dom'
+
+export default function AuthLayout() {
   return (
     <div className="min-h-dvh flex flex-col items-center justify-center bg-[#f8fafc] px-5 py-8">
       {/* Decorative background blobs */}
@@ -18,7 +20,7 @@ export default function AuthLayout({ children }) {
       />
 
       <div className="w-full max-w-sm relative z-10">
-        {children}
+        <Outlet />
       </div>
     </div>
   )

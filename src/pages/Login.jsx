@@ -113,10 +113,14 @@ export default function Login() {
             id="login-submit"
             type="submit"
             disabled={loading || !username || !password}
-            className="btn btn-primary w-full mt-2 text-base font-bold shadow-md shadow-green-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full mt-2 h-12 rounded-xl text-base font-bold text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.97]"
+            style={{
+              background: 'linear-gradient(135deg, #14b8a6, #0d9488)',
+              boxShadow: '0 4px 14px 0 rgba(20, 184, 166, 0.35)',
+            }}
           >
             {loading ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center gap-2">
                 <div className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin-slow" />
                 Masuk...
               </div>
