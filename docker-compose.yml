@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  panyeppen-cloud:
+    build: .
+    container_name: panyeppen_cloud_app
+    ports:
+      - "3001:3001"
+    volumes:
+      - panyeppen_data:/app/data
+      - panyeppen_storage:/app/storage
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - JWT_SECRET=change-this-secret-key-in-production
+      - STORAGE_PATH=/app/storage
+    restart: unless-stopped
+
+volumes:
+  panyeppen_data:
+    name: panyeppen_db_data
+  panyeppen_storage:
+    name: panyeppen_user_storage

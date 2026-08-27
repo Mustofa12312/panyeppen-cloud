@@ -1,16 +1,53 @@
-# React + Vite
+# Panyeppen Cloud ☁️
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Panyeppen Cloud adalah aplikasi penyimpanan cloud mandiri (*self-hosted cloud storage*) yang ringan, cepat, dan aman. Dibangun dengan **React 19**, **Tailwind CSS v4**, **Node.js (Express)**, dan **SQLite**.
 
-Currently, two official plugins are available:
+## Fitur Utama
+*   **📂 Manajemen File & Folder:** Unggah, unduh, hapus, ganti nama, dan pindahkan file layaknya *file explorer* asli dengan dukungan *Drag and Drop*.
+*   **🔗 Berbagi Aman (Secure Sharing):** Bagikan file Anda ke publik melalui tautan yang dapat diproteksi menggunakan **Kata Sandi** dan **Batas Kedaluwarsa (Expiration Date)**.
+*   **🗑️ Tempat Sampah (Trash Bin):** Mencegah kehilangan data. File yang dihapus akan dipindah ke tempat sampah terlebih dahulu dan bisa dipulihkan kapan saja.
+*   **⚡ Mode Multi-Select & Zip Download:** Pilih banyak file sekaligus dan unduh sebagai arsip `.zip` secara langsung.
+*   **🔍 Pencarian Cepat:** Mencari file dan folder di seluruh tingkatan direktori secara instan.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Memulai Cepat (Local Development)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. Kloning Repositori & Instalasi
+```bash
+git clone https://github.com/Mustofa12312/panyeppen-cloud.git
+cd "panyeppen-cloud"
+npm install
+```
 
-## Expanding the Oxlint configuration
+### 2. Inisialisasi Database
+Jalankan skrip *seeder* untuk membuat tabel database dan akun admin awal:
+```bash
+node seed.js
+```
+*(Catatan: Akun bawaan adalah Username: `admin`, Password: `password123`)*
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### 3. Menjalankan Server & Frontend
+Jalankan perintah ini untuk menjalankan API backend dan Vite frontend secara bersamaan (mode dev):
+```bash
+npm run dev
+```
+
+Buka aplikasi di `http://localhost:5173`
+
+---
+
+## Deployment (Docker Production)
+
+Cara termudah dan paling direkomendasikan untuk menjalankan aplikasi ini di server VPS adalah menggunakan **Docker Compose**.
+
+### Menjalankan dengan Docker
+1. Pastikan Docker dan Docker Compose telah terinstal di server Anda.
+2. Edit nilai `JWT_SECRET` pada file `docker-compose.yml` agar lebih aman.
+3. Jalankan perintah berikut:
+```bash
+docker compose up -d --build
+```
+Aplikasi kini berjalan di *background* pada port `3001`. Anda bisa mengatur Reverse Proxy (seperti Nginx atau Traefik) agar mengarah ke `http://localhost:3001`.
+
+*Data database dan file pengguna disimpan dalam Docker Volumes (`panyeppen_data` dan `panyeppen_storage`), sehingga data tidak akan hilang saat container dimulai ulang.*

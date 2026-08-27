@@ -12,6 +12,7 @@ import Upload from '../pages/Upload'
 import Search from '../pages/Search'
 import Profile from '../pages/Profile'
 import Shared from '../pages/Shared'
+import Trash from '../pages/Trash'
 
 /**
  * Protected Route — redirect ke /login jika belum auth
@@ -120,6 +121,16 @@ export default function AppRoutes() {
           <ProtectedRoute>
             <DashboardLayout>
               <Shared />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/trash"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <Trash />
             </DashboardLayout>
           </ProtectedRoute>
         }

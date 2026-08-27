@@ -5,12 +5,14 @@ import {
   ShareIcon,
   UserIcon,
   CloudArrowUpIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline'
 import {
   HomeIcon as HomeIconSolid,
   FolderIcon as FolderIconSolid,
   ShareIcon as ShareIconSolid,
   UserIcon as UserIconSolid,
+  TrashIcon as TrashIconSolid,
 } from '@heroicons/react/24/solid'
 import { useAuth } from '../hooks/useAuth'
 import StorageCard from './StorageCard'
@@ -19,6 +21,7 @@ const navItems = [
   { to: '/', label: 'Dashboard', Icon: HomeIcon, IconActive: HomeIconSolid, end: true },
   { to: '/files', label: 'Semua File', Icon: FolderIcon, IconActive: FolderIconSolid },
   { to: '/shared', label: 'Dibagikan', Icon: ShareIcon, IconActive: ShareIconSolid },
+  { to: '/trash', label: 'Sampah', Icon: TrashIcon, IconActive: TrashIconSolid },
   { to: '/profile', label: 'Pengaturan', Icon: UserIcon, IconActive: UserIconSolid },
 ]
 
