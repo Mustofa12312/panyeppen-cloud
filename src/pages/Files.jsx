@@ -169,6 +169,23 @@ export default function Files() {
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
   const [viewMode, setViewMode] = useState(() => localStorage.getItem('viewMode') || 'grid')
+  const [sortBy, setSortBy] = useState('date_desc')
+
+  const sortItems = (items) => {
+    return [...items].sort((a, b) => {
+      switch (sortBy) {
+        case 'name_asc': return a.name.localeCompare(b.name)
+        case 'name_desc': return b.name.localeCompare(a.name)
+        case 'size_desc': return (b.size || 0) - (a.size || 0)
+        case 'size_asc': return (a.size || 0) - (b.size || 0)
+        case 'date_asc': return new Date(a.lastModified) - new Date(b.lastModified)
+        case 'date_desc': default: return new Date(b.lastModified) - new Date(a.lastModified)
+      }
+    })
+  }
+
+  const sortedFolders = sortItems(folders)
+  const sortedFiles = sortItems(fileItems)
 
   const toggleViewMode = (mode) => {
     setViewMode(mode)
@@ -272,6 +289,19 @@ export default function Files() {
           </p>
         </div>
         <div className="flex items-center gap-2 md:gap-3">
+          <select 
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="input !h-9 !px-2 !py-0 !rounded-md text-xs font-semibold !w-auto bg-white"
+          >
+            <option value="date_desc">Terbaru</option>
+            <option value="date_asc">Terlama</option>
+            <option value="name_asc">Nama (A-Z)</option>
+            <option value="name_desc">Nama (Z-A)</option>
+            <option value="size_desc">Terbesar</option>
+            <option value="size_asc">Terkecil</option>
+          </select>
+
           <div className="flex bg-[var(--color-background)] rounded-lg p-1 border border-[var(--color-border)] shadow-inner">
             <button
               onClick={() => toggleViewMode('grid')}
@@ -341,7 +371,7 @@ export default function Files() {
             <div>
               <p className="section-title">Folder</p>
               <div className={gridClass}>
-                {folders.map((folder) => (
+                {sortedFolders.map((folder) => (
                   <FolderCard
                     key={folder.id}
                     folder={folder}
@@ -358,7 +388,7 @@ export default function Files() {
             <div>
               <p className="section-title">File</p>
               <div className={gridClass}>
-                {fileItems.map((file) => (
+                {sortedFiles.map((file) => (
                   <FileCard
                     key={file.id}
                     file={file}

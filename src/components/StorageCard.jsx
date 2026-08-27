@@ -28,7 +28,7 @@ export default function StorageCard({ used = 0, total = 0 }) {
             {formatFileSize(used)}
           </p>
           <p className="text-sm text-teal-100 mt-1 font-medium opacity-90">
-            dari {total > 0 ? formatFileSize(total) : 'Tidak terbatas'}
+            {total > 0 ? `dari ${formatFileSize(total)}` : 'Kuota belum ditentukan'}
           </p>
         </div>
         <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-center shadow-inner">
@@ -53,10 +53,10 @@ export default function StorageCard({ used = 0, total = 0 }) {
 
       <div className="relative z-10 flex justify-between items-center mt-3">
         <p className="text-xs font-medium text-teal-100">
-          {formatFileSize(Math.max((total || 0) - used, 0))} tersisa
+          {total > 0 ? `${formatFileSize(Math.max(total - used, 0))} tersisa` : 'Pemakaian saat ini'}
         </p>
         <p className="text-xs font-bold text-white bg-white/20 px-2 py-0.5 rounded-md backdrop-blur-sm border border-white/10">
-          {percent}%
+          {total > 0 ? `${percent}%` : '---'}
         </p>
       </div>
     </div>

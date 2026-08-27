@@ -59,6 +59,12 @@ export async function deleteItem(path) {
   await api.delete('/files', { params: { path } })
 }
 
+// 5a. Copy item
+export async function copy(sourcePath, destinationPath) {
+  const response = await api.post('/files/copy', { sourcePath, destinationPath })
+  return response.data.path
+}
+
 // 5b. Bulk Delete items
 export async function bulkDelete(paths) {
   await api.post('/files/bulk-delete', { paths })

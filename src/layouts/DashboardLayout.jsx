@@ -24,7 +24,7 @@ export default function DashboardLayout({ children, headerProps }) {
         <Header {...headerProps} />
 
         {/* Main content */}
-        <main className="flex-1 w-full max-w-6xl mx-auto px-4 md:px-8 pt-4 pb-24 md:pb-8">
+        <main className="flex-1 w-full max-w-[1600px] mx-auto px-4 md:px-8 pt-4 pb-24 md:pb-8">
           {children}
         </main>
       </div>

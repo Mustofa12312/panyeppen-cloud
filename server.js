@@ -269,6 +269,44 @@ app.put('/api/files/rename', authenticateToken, async (req, res) => {
   }
 })
 
+// 4b. Copy file/folder
+app.post('/api/files/copy', authenticateToken, async (req, res) => {
+  try {
+    const { sourcePath, destinationPath } = req.body
+    if (!sourcePath || !destinationPath) return res.status(400).json({ error: 'sourcePath and destinationPath required' })
+    
+    const { safePath: sourceSafePath } = getSafePath(req.user.username, sourcePath)
+    
+    if (!fs.existsSync(sourceSafePath)) {
+      return res.status(404).json({ error: 'Source file not found' })
+    }
+    
+    // Default destination is same directory with different name if destinationPath is the same as source directory
+    // Otherwise, it's a new directory. But let's handle simple duplication first.
+    const destDir = path.dirname(getSafePath(req.user.username, destinationPath).safePath)
+    
+    // If copying to same folder, append ' - Copy'
+    let newName = path.basename(sourceSafePath)
+    if (path.dirname(sourceSafePath) === destDir) {
+      const ext = path.extname(newName)
+      const base = path.basename(newName, ext)
+      newName = `${base} - Copy${ext}`
+    }
+    
+    const uniqueNewName = getUniqueFilename(destDir, newName)
+    const newSafePath = path.join(destDir, uniqueNewName)
+    
+    await fs.copy(sourceSafePath, newSafePath)
+    
+    const userStoragePath = path.join(STORAGE_DIR, req.user.username)
+    const newRelativePath = newSafePath.substring(userStoragePath.length).replace(/\\/g, '/') || '/'
+    res.json({ message: 'Copied successfully', path: newRelativePath })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: err.message })
+  }
+})
+
 // 5. Delete file/folder (Soft Delete to Trash)
 app.delete('/api/files', authenticateToken, async (req, res) => {
   try {

@@ -86,10 +86,9 @@ export default function Header({ title, showBack = false, onBack }) {
           <button
             className="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-white/80 transition-all relative border border-transparent hover:border-[var(--color-glass-border)] hover:shadow-sm"
             aria-label="Notifikasi"
+            onClick={() => {}}
           >
             <BellIcon className="w-5 h-5 text-[var(--color-text-light)]" />
-            {/* Badge notifikasi */}
-            <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[var(--color-danger)] shadow-[0_0_0_2px_var(--color-surface)]" />
           </button>
           <Link
             to="/profile"

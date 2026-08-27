@@ -28,6 +28,13 @@ const navItems = [
 
 export default function Sidebar({ collapsed, onToggle }) {
   const { user } = useAuth()
+  
+  const used = user?.quota?.used || 0
+  const total = user?.quota?.total || 0
+  const percent = total > 0 ? Math.min(Math.round((used / total) * 100), 100) : 0
+  const radius = 18
+  const circumference = 2 * Math.PI * radius
+  const strokeDashoffset = circumference - (percent / 100) * circumference
 
   return (
     <aside className={`fixed top-0 left-0 h-dvh ${collapsed ? 'w-24' : 'w-72'} transition-all duration-300 bg-white/40 backdrop-blur-2xl border-r border-white/50 flex flex-col z-50 shadow-[4px_0_24px_rgba(0,0,0,0.02)] group/sidebar`}>
@@ -111,9 +118,26 @@ export default function Sidebar({ collapsed, onToggle }) {
 
       {/* Profile & Storage Summary */}
       <div className={`p-5 mt-auto border-t border-white/40 bg-white/30 backdrop-blur-xl rounded-tl-3xl shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.05)] ${collapsed ? 'px-4 flex flex-col items-center' : ''}`}>
-        {!collapsed && (
+        {!collapsed ? (
           <div className="mb-4">
-            <StorageCard used={user?.quota?.used || 0} total={user?.quota?.total || 0} />
+            <StorageCard used={used} total={total} />
+          </div>
+        ) : (
+          <div className="mb-4 relative w-11 h-11 flex items-center justify-center group" title={`Penyimpanan: ${percent}%`}>
+            <svg className="w-full h-full -rotate-90" viewBox="0 0 44 44">
+              <circle cx="22" cy="22" r={radius} className="fill-none stroke-slate-200 dark:stroke-slate-700" strokeWidth="4" />
+              <circle 
+                cx="22" 
+                cy="22" 
+                r={radius} 
+                className="fill-none stroke-teal-500 transition-all duration-1000 ease-out" 
+                strokeWidth="4" 
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+                strokeLinecap="round"
+              />
+            </svg>
+            <CloudIcon className="absolute w-4 h-4 text-teal-600" />
           </div>
         )}
         <Link 

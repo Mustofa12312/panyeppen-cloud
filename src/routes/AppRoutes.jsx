@@ -14,6 +14,7 @@ import Search from '../pages/Search'
 import Profile from '../pages/Profile'
 import Shared from '../pages/Shared'
 import Trash from '../pages/Trash'
+import NotFound from '../pages/NotFound'
 
 /**
  * Protected Route — redirect ke /login jika belum auth
@@ -144,7 +145,7 @@ export default function AppRoutes() {
       />
 
       {/* Catch-all */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }

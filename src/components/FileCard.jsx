@@ -15,11 +15,33 @@ import FilePreviewModal from './FilePreviewModal'
 import { formatFileSize } from '../utils/formatFileSize'
 import { formatRelativeDate } from '../utils/formatDate'
 import { getFileType } from '../utils/fileTypes'
+import { getPreviewUrl } from '../services/files'
 
-function FileIcon({ filename, size = 'md' }) {
-  const type = getFileType(filename)
+function FileIcon({ file, size = 'md' }) {
+  const type = getFileType(file.name)
   const dim = size === 'lg' ? 'w-12 h-12' : 'w-10 h-10'
   const textSize = size === 'lg' ? 'text-[0.5rem]' : 'text-[0.5rem]'
+
+  // Check if it's an image
+  const isImage = file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)
+
+  if (isImage) {
+    return (
+      <div className={`${dim} rounded-xl overflow-hidden shadow-sm group-hover:scale-105 transition-transform duration-300 border border-black/5 dark:border-white/10 shrink-0 bg-slate-100 dark:bg-slate-800`}>
+        <img 
+          src={getPreviewUrl(file.path)} 
+          alt={file.name}
+          className="w-full h-full object-cover"
+          loading="lazy"
+          onError={(e) => {
+            e.target.onerror = null
+            // Fallback to text icon if image fails to load
+            e.target.parentElement.innerHTML = `<div style="background-color:${type.bg};color:${type.color};border-color:${type.color}30" class="w-full h-full flex items-center justify-center font-bold ${textSize} uppercase tracking-widest">${type.label.slice(0, 3)}</div>`
+          }}
+        />
+      </div>
+    )
+  }
 
   return (
     <div
@@ -101,7 +123,7 @@ export default function FileCard({ file, onDelete, onRename, onDownload, selecte
           )}
         </div>
 
-        <FileIcon filename={file.name} />
+        <FileIcon file={file} />
 
         <div className="flex-1 min-w-0">
           <p className="font-bold text-sm text-[var(--color-text)] truncate tracking-wide">{file.name}</p>

@@ -12,7 +12,7 @@ import StorageCard from '../components/StorageCard'
 import FileCard from '../components/FileCard'
 import FolderCard from '../components/FolderCard'
 import EmptyState from '../components/EmptyState'
-import { list, download, deleteItem, rename, getStorageInfo } from '../services/files'
+import { list, download, deleteItem, rename, getStorageInfo, upload } from '../services/files'
 import { refreshUser } from '../services/auth'
 
 function getGreeting() {
@@ -21,6 +21,53 @@ function getGreeting() {
   if (hour < 15) return 'Selamat siang'
   if (hour < 18) return 'Selamat sore'
   return 'Selamat malam'
+}
+
+function RenameModal({ item, onClose, onRename }) {
+  const [name, setName] = useState(item?.name || '')
+  const [loading, setLoading] = useState(false)
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!name.trim() || name === item?.name) return onClose()
+    setLoading(true)
+    try { await onRename(item, name); onClose() } finally { setLoading(false) }
+  }
+  return (
+    <div className="modal-backdrop z-[60]" onClick={onClose}>
+      <div className="bottom-sheet" onClick={(e) => e.stopPropagation()}>
+        <div className="bottom-sheet-handle" />
+        <h3 className="text-lg font-bold mb-4 text-[var(--color-text)]">Ganti Nama</h3>
+        <form onSubmit={handleSubmit}>
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="input mb-4" autoFocus />
+          <div className="flex gap-3">
+            <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm transition-all bg-[var(--color-background)] text-[var(--color-text-light)]">Batal</button>
+            <button type="submit" disabled={!name.trim() || loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white transition-all bg-teal-600 hover:bg-teal-700">{loading ? 'Menyimpan...' : 'Simpan'}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+function DeleteModal({ title, description, onClose, onDelete }) {
+  const [loading, setLoading] = useState(false)
+  const handleDelete = async () => {
+    setLoading(true)
+    try { await onDelete(); onClose() } finally { setLoading(false) }
+  }
+  return (
+    <div className="modal-backdrop z-[60]" onClick={onClose}>
+      <div className="bottom-sheet" onClick={(e) => e.stopPropagation()}>
+        <div className="bottom-sheet-handle" />
+        <h3 className="text-lg font-bold mb-2 text-red-600">{title}</h3>
+        <p className="text-sm text-[var(--color-muted)] mb-6">{description}</p>
+        <div className="flex gap-3">
+          <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm transition-all bg-[var(--color-background)] text-[var(--color-text-light)]">Batal</button>
+          <button onClick={handleDelete} disabled={loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white transition-all bg-red-500 hover:bg-red-600">{loading ? 'Menghapus...' : 'Hapus'}</button>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default function Dashboard() {
@@ -32,6 +79,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
+  const [renamingItem, setRenamingItem] = useState(null)
+  const [deletingItem, setDeletingItem] = useState(null)
   const { showToast } = useToast()
 
   const loadData = async () => {
@@ -76,10 +125,14 @@ export default function Dashboard() {
     }
   }
 
-  const handleDelete = async (item) => {
-    if (!confirm(`Hapus "${item.name}"?`)) return
+  const handleDelete = (item) => {
+    setDeletingItem(item)
+  }
+
+  const confirmDelete = async () => {
+    if (!deletingItem) return
     try {
-      await deleteItem(item.path)
+      await deleteItem(deletingItem.path)
       showToast('File berhasil dihapus', 'success')
       await loadData()
     } catch {
@@ -87,9 +140,11 @@ export default function Dashboard() {
     }
   }
 
-  const handleRename = async (item) => {
-    const newName = prompt('Nama baru:', item.name)
-    if (!newName || newName === item.name) return
+  const handleRename = (item) => {
+    setRenamingItem(item)
+  }
+
+  const confirmRename = async (item, newName) => {
     try {
       await rename(item.path, newName)
       showToast('File berhasil di-rename', 'success')
@@ -119,12 +174,13 @@ export default function Dashboard() {
     showToast(`Memulai upload ${files.length} file...`, 'info')
     
     try {
-      // Simulate upload process since we don't have the real endpoint fully wired in this mock
-      await new Promise(r => setTimeout(r, 1500))
-      showToast('File berhasil diupload!', 'success')
+      await Promise.all(
+        files.map(file => upload('/', file))
+      )
+      showToast(`${files.length} file berhasil diupload!`, 'success')
       await loadData()
     } catch {
-      showToast('Gagal mengupload file', 'error')
+      showToast('Gagal mengupload beberapa file', 'error')
     }
   }
 
@@ -286,6 +342,23 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+
+      {/* Modals */}
+      {renamingItem && (
+        <RenameModal
+          item={renamingItem}
+          onClose={() => setRenamingItem(null)}
+          onRename={confirmRename}
+        />
+      )}
+      {deletingItem && (
+        <DeleteModal
+          title={`Hapus ${deletingItem.isFolder ? 'Folder' : 'File'}`}
+          description={`Apakah Anda yakin ingin menghapus "${deletingItem.name}"? File yang dihapus akan dipindahkan ke Sampah.`}
+          onClose={() => setDeletingItem(null)}
+          onDelete={confirmDelete}
+        />
+      )}
     </div>
   )
 }
