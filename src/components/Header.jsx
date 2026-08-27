@@ -43,7 +43,7 @@ export default function Header({ title, showBack = false, onBack }) {
           {showBack ? (
             <button
               onClick={handleBack}
-              className="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-white/80 transition-all active:scale-95 border border-transparent hover:border-[var(--color-glass-border)] hover:shadow-sm"
+              className="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-surface-solid transition-all active:scale-95 border border-transparent hover:border-glass-border hover:shadow-sm"
               aria-label="Kembali"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -74,7 +74,7 @@ export default function Header({ title, showBack = false, onBack }) {
         <div className="flex items-center gap-1 md:gap-2">
           <button
             onClick={toggleDark}
-            className="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-white/80 transition-all border border-transparent hover:border-[var(--color-glass-border)] hover:shadow-sm"
+            className="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-surface-solid transition-all border border-transparent hover:border-glass-border hover:shadow-sm"
             aria-label="Toggle Dark Mode"
           >
             {isDark ? (
@@ -84,7 +84,7 @@ export default function Header({ title, showBack = false, onBack }) {
             )}
           </button>
           <button
-            className="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-white/80 transition-all relative border border-transparent hover:border-[var(--color-glass-border)] hover:shadow-sm"
+            className="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-surface-solid transition-all relative border border-transparent hover:border-glass-border hover:shadow-sm"
             aria-label="Notifikasi"
             onClick={() => {}}
           >
@@ -92,7 +92,7 @@ export default function Header({ title, showBack = false, onBack }) {
           </button>
           <Link
             to="/profile"
-            className="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-white/80 transition-all border border-transparent hover:border-[var(--color-glass-border)] hover:shadow-sm"
+            className="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-surface-solid transition-all border border-transparent hover:border-glass-border hover:shadow-sm"
             aria-label="Profil"
           >
             {user?.displayName ? (

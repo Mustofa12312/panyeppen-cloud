@@ -37,11 +37,11 @@ export default function Sidebar({ collapsed, onToggle }) {
   const strokeDashoffset = circumference - (percent / 100) * circumference
 
   return (
-    <aside className={`fixed top-0 left-0 h-dvh ${collapsed ? 'w-24' : 'w-72'} transition-all duration-300 bg-white/40 backdrop-blur-2xl border-r border-white/50 flex flex-col z-50 shadow-[4px_0_24px_rgba(0,0,0,0.02)] group/sidebar`}>
+    <aside className={`fixed top-0 left-0 h-dvh ${collapsed ? 'w-24' : 'w-72'} transition-all duration-300 bg-[var(--color-surface)]/40 backdrop-blur-2xl border-r border-[var(--color-glass-border)] flex flex-col z-50 shadow-[4px_0_24px_rgba(0,0,0,0.02)] group/sidebar`}>
       {/* Toggle Button */}
       <button
         onClick={onToggle}
-        className="absolute -right-3 top-8 w-6 h-6 bg-white border border-teal-200 rounded-full flex items-center justify-center shadow-md text-teal-600 hover:text-teal-700 hover:bg-teal-50 transition-all z-50 opacity-0 group-hover/sidebar:opacity-100"
+        className="absolute -right-3 top-8 w-6 h-6 bg-[var(--color-surface-solid)] border border-teal-500/30 rounded-full flex items-center justify-center shadow-md text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-900/30 transition-all z-50 opacity-0 group-hover/sidebar:opacity-100"
       >
         {collapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronLeftIcon className="w-4 h-4" />}
       </button>
@@ -56,7 +56,7 @@ export default function Sidebar({ collapsed, onToggle }) {
             </svg>
           </div>
           {!collapsed && (
-            <span className="font-extrabold text-xl text-slate-800 tracking-tight group-hover:text-teal-700 transition-colors whitespace-nowrap">
+            <span className="font-extrabold text-xl text-[var(--color-text-main)] tracking-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors whitespace-nowrap">
               Panyeppen Cloud
             </span>
           )}
@@ -93,8 +93,8 @@ export default function Sidebar({ collapsed, onToggle }) {
                 collapsed ? 'justify-center gap-0' : 'justify-start gap-3.5'
               } ${
                 isActive
-                  ? 'text-teal-700 bg-white/60 shadow-sm border border-white'
-                  : 'text-slate-500 hover:text-slate-800 hover:bg-white/40 border border-transparent'
+                  ? 'text-teal-600 dark:text-teal-400 bg-[var(--color-surface)]/60 shadow-sm border border-[var(--color-glass-border)]'
+                  : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] hover:bg-[var(--color-surface)]/40 border border-transparent'
               }`
             }
           >
@@ -117,7 +117,7 @@ export default function Sidebar({ collapsed, onToggle }) {
       </nav>
 
       {/* Profile & Storage Summary */}
-      <div className={`p-5 mt-auto border-t border-white/40 bg-white/30 backdrop-blur-xl rounded-tl-3xl shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.05)] ${collapsed ? 'px-4 flex flex-col items-center' : ''}`}>
+      <div className={`p-5 mt-auto border-t border-[var(--color-glass-border)] bg-[var(--color-surface)]/30 backdrop-blur-xl rounded-tl-3xl shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.05)] ${collapsed ? 'px-4 flex flex-col items-center' : ''}`}>
         {!collapsed ? (
           <div className="mb-4">
             <StorageCard used={used} total={total} />
@@ -125,7 +125,7 @@ export default function Sidebar({ collapsed, onToggle }) {
         ) : (
           <div className="mb-4 relative w-11 h-11 flex items-center justify-center group" title={`Penyimpanan: ${percent}%`}>
             <svg className="w-full h-full -rotate-90" viewBox="0 0 44 44">
-              <circle cx="22" cy="22" r={radius} className="fill-none stroke-slate-200 dark:stroke-slate-700" strokeWidth="4" />
+              <circle cx="22" cy="22" r={radius} className="fill-none stroke-[var(--color-border-subtle)]" strokeWidth="4" />
               <circle 
                 cx="22" 
                 cy="22" 
@@ -143,7 +143,7 @@ export default function Sidebar({ collapsed, onToggle }) {
         <Link 
           to="/profile" 
           title={collapsed ? "Pengaturan Profil" : ""}
-          className={`flex items-center bg-white/50 hover:bg-white rounded-2xl transition-all border border-white/60 shadow-sm group ${collapsed ? 'p-2 justify-center' : 'p-3 gap-3'}`}
+          className={`flex items-center bg-[var(--color-surface)]/50 hover:bg-[var(--color-surface-solid)] rounded-2xl transition-all border border-[var(--color-glass-border)] shadow-sm group ${collapsed ? 'p-2 justify-center' : 'p-3 gap-3'}`}
         >
           <div className="w-11 h-11 rounded-full bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center shadow-inner border border-white/30 group-hover:scale-105 transition-transform shrink-0">
             <span className="text-white text-sm font-bold shadow-sm">
@@ -152,10 +152,10 @@ export default function Sidebar({ collapsed, onToggle }) {
           </div>
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-slate-800 truncate tracking-wide group-hover:text-teal-700 transition-colors">
+              <p className="text-sm font-bold text-[var(--color-text-main)] truncate tracking-wide group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
                 {user?.displayName || 'Pengguna'}
               </p>
-              <p className="text-xs text-slate-500 truncate font-medium">@{user?.id || 'id'}</p>
+              <p className="text-xs text-[var(--color-text-muted)] truncate font-medium">@{user?.id || 'id'}</p>
             </div>
           )}
         </Link>
