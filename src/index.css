@@ -34,11 +34,11 @@
 
 .dark {
   --color-surface: rgba(15, 23, 42, 0.75);
-  --color-surface-solid: #020617;
+  --color-surface-solid: #0f172a;
   --color-background: #020617;
   --color-text: #f8fafc;
-  --color-text-light: #94a3b8;
-  --color-muted: #475569;
+  --color-text-light: #cbd5e1;
+  --color-muted: #64748b;
   --color-danger: #ef4444;
   --color-border: rgba(30, 41, 59, 0.6);
   --color-glass-border: rgba(255, 255, 255, 0.05);
@@ -227,7 +227,7 @@ body.dark {
     font-size: 1rem;
     font-family: inherit;
     color: var(--color-text);
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--color-surface);
     backdrop-filter: blur(8px);
     transition: all 0.3s ease;
     outline: none;
@@ -236,7 +236,7 @@ body.dark {
   .input:focus {
     border-color: #2dd4bf;
     box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.02);
-    background: #ffffff;
+    background: var(--color-surface-solid);
   }
   .input::placeholder { color: var(--color-muted); font-weight: 400; }
 
@@ -258,7 +258,7 @@ body.dark {
 
   /* Bottom sheet */
   .bottom-sheet {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--color-surface);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid var(--color-glass-border);
@@ -308,7 +308,7 @@ body.dark {
   .section-title {
     font-size: 0.75rem;
     font-weight: 700;
-    color: #94a3b8;
+    color: var(--color-muted);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: 0.75rem;
