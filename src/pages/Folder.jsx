@@ -55,8 +55,8 @@ function NewFolderModal({ onClose, onCreate }) {
         <form onSubmit={handleSubmit}>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Nama folder..." className="input mb-4" autoFocus required />
           <div className="flex gap-3">
-            <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all">Batal</button>
-            <button type="submit" disabled={!name.trim() || loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white shadow-md bg-teal-600 transition-all active:scale-95 disabled:opacity-50">{loading ? 'Membuat...' : 'Buat'}</button>
+            <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm transition-all active:scale-95" style={{ background: '#f1f5f9', color: '#475569' }}>Batal</button>
+            <button type="submit" disabled={!name.trim() || loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white shadow-md transition-all active:scale-95 disabled:opacity-50" style={{ background: '#0d9488' }}>{loading ? 'Membuat...' : 'Buat'}</button>
           </div>
         </form>
       </div>
@@ -81,8 +81,8 @@ function RenameModal({ item, onClose, onRename }) {
         <form onSubmit={handleSubmit}>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="input mb-4" autoFocus required />
           <div className="flex gap-3">
-            <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm bg-slate-100 hover:bg-slate-200 text-slate-600">Batal</button>
-            <button type="submit" disabled={!name.trim() || name === item?.name || loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white bg-teal-600">{loading ? 'Menyimpan...' : 'Simpan'}</button>
+            <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm transition-all" style={{ background: '#f1f5f9', color: '#475569' }}>Batal</button>
+            <button type="submit" disabled={!name.trim() || name === item?.name || loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white transition-all" style={{ background: '#0d9488' }}>{loading ? 'Menyimpan...' : 'Simpan'}</button>
           </div>
         </form>
       </div>
@@ -107,8 +107,8 @@ function MoveModal({ item, currentPath, onClose, onMove }) {
         <form onSubmit={handleSubmit}>
           <input type="text" value={target} onChange={(e) => setTarget(e.target.value)} placeholder="/Path/Tujuan" className="input mb-4" required />
           <div className="flex gap-3">
-            <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm bg-slate-100 hover:bg-slate-200 text-slate-600">Batal</button>
-            <button type="submit" disabled={!target.trim() || loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white bg-teal-600">{loading ? 'Memindah...' : 'Pindah'}</button>
+            <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm transition-all" style={{ background: '#f1f5f9', color: '#475569' }}>Batal</button>
+            <button type="submit" disabled={!target.trim() || loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white transition-all" style={{ background: '#0d9488' }}>{loading ? 'Memindah...' : 'Pindah'}</button>
           </div>
         </form>
       </div>
@@ -164,8 +164,8 @@ function ShareModal({ item, onClose }) {
               <input type="number" min="1" max="365" value={expiresInDays} onChange={(e) => setExpiresInDays(e.target.value)} placeholder="Contoh: 7" className="input" />
             </div>
             <div className="flex gap-3 pt-2">
-              <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
-              <button type="submit" disabled={loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white bg-purple-600 hover:bg-purple-700">{loading ? 'Membuat...' : 'Buat Tautan'}</button>
+            <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm transition-all" style={{ background: '#f1f5f9', color: '#475569' }}>Batal</button>
+            <button type="submit" disabled={loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white transition-all" style={{ background: '#7c3aed' }}>{loading ? 'Membuat...' : 'Buat Tautan'}</button>
             </div>
           </form>
         ) : (
@@ -173,11 +173,11 @@ function ShareModal({ item, onClose }) {
             <div className="p-3 bg-slate-100 rounded-xl break-all text-sm font-medium text-slate-700 border border-slate-200 select-all">
               {`${window.location.origin}${shareData.url}`}
             </div>
-            <button onClick={handleCopy} className="w-full flex items-center justify-center gap-2 h-12 rounded-xl font-bold text-sm text-white bg-purple-600 hover:bg-purple-700 transition-colors">
+            <button onClick={handleCopy} className="w-full flex items-center justify-center gap-2 h-12 rounded-xl font-bold text-sm text-white transition-colors" style={{ background: '#7c3aed' }}>
               <DocumentDuplicateIcon className="w-5 h-5" />
               {copied ? 'Tersalin!' : 'Salin Tautan'}
             </button>
-            <button onClick={onClose} className="w-full h-12 rounded-xl font-bold text-sm bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">Tutup</button>
+            <button onClick={onClose} className="w-full h-12 rounded-xl font-bold text-sm transition-colors" style={{ background: '#f1f5f9', color: '#475569' }}>Tutup</button>
           </div>
         )}
       </div>
@@ -198,8 +198,8 @@ function DeleteModal({ title, description, onClose, onDelete }) {
         <h3 className="text-lg font-bold mb-2 text-red-600">{title}</h3>
         <p className="text-sm text-[#64748b] mb-6">{description}</p>
         <div className="flex gap-3">
-          <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm bg-slate-100 hover:bg-slate-200 text-slate-600">Batal</button>
-          <button onClick={handleDelete} disabled={loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white bg-red-600 hover:bg-red-700">{loading ? 'Menghapus...' : 'Hapus'}</button>
+          <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm transition-all" style={{ background: '#f1f5f9', color: '#475569' }}>Batal</button>
+          <button onClick={handleDelete} disabled={loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white transition-all" style={{ background: '#ef4444' }}>{loading ? 'Menghapus...' : 'Hapus'}</button>
         </div>
       </div>
     </div>
@@ -385,7 +385,7 @@ export default function Folder() {
             
             <button onClick={refresh} disabled={loading} className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600"><ArrowPathIcon className={`w-5 h-5 ${loading ? 'animate-spin-slow' : ''}`} /></button>
             
-            <button onClick={() => setShowNewFolder(true)} className="flex items-center justify-center gap-1.5 h-10 px-4 text-white rounded-xl font-bold text-sm bg-teal-600 hover:bg-teal-700 shadow-md transition-all flex-shrink-0">
+            <button onClick={() => setShowNewFolder(true)} className="flex items-center justify-center gap-1.5 h-10 px-4 text-white rounded-xl font-bold text-sm shadow-md transition-all flex-shrink-0 active:scale-95" style={{ background: '#0d9488' }}>
               <FolderPlusIcon className="w-5 h-5" />
               <span className="hidden sm:inline">Folder Baru</span>
             </button>

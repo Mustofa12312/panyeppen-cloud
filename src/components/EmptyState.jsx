@@ -63,7 +63,11 @@ export default function EmptyState({
       {action && actionLabel && (
         <button
           onClick={action}
-          className="btn btn-primary mt-6 text-sm px-6"
+          className="mt-6 text-sm px-6 h-11 rounded-xl font-bold text-white transition-all active:scale-95"
+          style={{
+            background: 'linear-gradient(135deg, #14b8a6, #0d9488)',
+            boxShadow: '0 4px 14px 0 rgba(20, 184, 166, 0.3)',
+          }}
         >
           {actionLabel}
         </button>

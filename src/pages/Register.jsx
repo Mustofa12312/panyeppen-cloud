@@ -120,7 +120,11 @@ export default function Register() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex justify-center py-3.5 px-4 mt-6 border border-transparent rounded-xl shadow-md text-sm font-bold text-white bg-gradient-to-r from-[var(--color-primary-500)] to-[var(--color-primary-600)] hover:from-[var(--color-primary-400)] hover:to-[var(--color-primary-500)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-primary-500)] transition-all transform active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+          className="w-full flex justify-center py-3.5 px-4 mt-6 rounded-xl shadow-md text-sm font-bold text-white transition-all transform active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+          style={{
+            background: 'linear-gradient(135deg, #14b8a6, #0d9488)',
+            boxShadow: '0 4px 14px 0 rgba(20, 184, 166, 0.35)',
+          }}
         >
           {loading ? (
             <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

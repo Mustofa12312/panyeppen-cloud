@@ -49,7 +49,11 @@ export default function Sidebar() {
       <div className="px-5 mb-6">
         <Link
           to="/upload"
-          className="flex items-center justify-center gap-2 w-full h-12 bg-gradient-to-r from-[var(--color-primary-500)] to-[var(--color-primary-600)] hover:from-[var(--color-primary-400)] hover:to-[var(--color-primary-500)] text-white rounded-xl font-bold shadow-[0_4px_14px_0_rgba(20,184,166,0.3)] hover:shadow-[0_6px_20px_rgba(20,184,166,0.4)] transition-all active:scale-95 border border-white/20"
+          className="flex items-center justify-center gap-2 w-full h-12 text-white rounded-xl font-bold transition-all active:scale-95 border border-white/20"
+          style={{
+            background: 'linear-gradient(135deg, #14b8a6, #0d9488)',
+            boxShadow: '0 4px 14px 0 rgba(20, 184, 166, 0.3)',
+          }}
         >
           <CloudArrowUpIcon className="w-5 h-5" strokeWidth={2.5} />
           Upload Baru
