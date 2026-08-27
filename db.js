@@ -23,6 +23,9 @@ export async function getDb() {
     driver: sqlite3.Database
   })
 
+  // Optimize SQLite
+  await dbInstance.exec('PRAGMA journal_mode=WAL;')
+
   // Initialize tables
   await dbInstance.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -40,7 +43,28 @@ export async function getDb() {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
+
+    CREATE TABLE IF NOT EXISTS trash_items (
+      id TEXT PRIMARY KEY, -- UUID
+      user_id INTEGER NOT NULL,
+      original_path TEXT NOT NULL,
+      trash_filename TEXT NOT NULL,
+      deleted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
   `)
+
+  // Migrations (Add new columns if not exist)
+  try {
+    await dbInstance.exec(`ALTER TABLE shares ADD COLUMN expires_at DATETIME;`)
+  } catch (err) {
+    // Column might already exist
+  }
+  try {
+    await dbInstance.exec(`ALTER TABLE shares ADD COLUMN password_hash TEXT;`)
+  } catch (err) {
+    // Column might already exist
+  }
 
   return dbInstance
 }

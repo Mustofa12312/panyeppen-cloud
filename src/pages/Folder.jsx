@@ -118,19 +118,24 @@ function MoveModal({ item, currentPath, onClose, onMove }) {
 
 function ShareModal({ item, onClose }) {
   const [shareData, setShareData] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [password, setPassword] = useState('')
+  const [expiresInDays, setExpiresInDays] = useState('')
   const { showToast } = useToast()
 
-  useState(() => {
-    createShareLink(item.path).then(res => {
+  const handleCreate = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      const res = await createShareLink(item.path, password, expiresInDays)
       setShareData(res)
-      setLoading(false)
-    }).catch(() => {
+    } catch {
       showToast('Gagal membuat tautan', 'error')
-      onClose()
-    })
-  }, [])
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleCopy = () => {
     if (shareData) {
@@ -146,9 +151,23 @@ function ShareModal({ item, onClose }) {
       <div className="bottom-sheet" onClick={(e) => e.stopPropagation()}>
         <div className="bottom-sheet-handle" />
         <h3 className="text-lg font-bold mb-2">Bagikan Tautan Publik</h3>
-        <p className="text-sm text-slate-500 mb-5">Siapapun yang memiliki tautan ini dapat mengakses "{item?.name}".</p>
-        {loading ? (
-          <div className="flex justify-center py-4"><div className="w-6 h-6 border-2 border-teal-600 border-t-transparent rounded-full animate-spin"></div></div>
+        <p className="text-sm text-slate-500 mb-5">Bagikan "{item?.name}" ke orang lain secara aman.</p>
+        
+        {!shareData ? (
+          <form onSubmit={handleCreate} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 mb-1">Kata Sandi (Opsional)</label>
+              <input type="text" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Kosongkan jika tidak perlu" className="input" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 mb-1">Berlaku Selama (Hari, Opsional)</label>
+              <input type="number" min="1" max="365" value={expiresInDays} onChange={(e) => setExpiresInDays(e.target.value)} placeholder="Contoh: 7" className="input" />
+            </div>
+            <div className="flex gap-3 pt-2">
+              <button type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-bold text-sm bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
+              <button type="submit" disabled={loading} className="flex-1 h-12 rounded-xl font-bold text-sm text-white bg-purple-600 hover:bg-purple-700">{loading ? 'Membuat...' : 'Buat Tautan'}</button>
+            </div>
+          </form>
         ) : (
           <div className="space-y-4">
             <div className="p-3 bg-slate-100 rounded-xl break-all text-sm font-medium text-slate-700 border border-slate-200 select-all">

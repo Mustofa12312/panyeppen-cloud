@@ -93,8 +93,8 @@ export async function getStorageInfo() {
 }
 
 // 10. Generate Share Link
-export async function createShareLink(path) {
-  const response = await api.post('/shares', { path })
+export async function createShareLink(path, password = '', expiresInDays = '') {
+  const response = await api.post('/shares', { path, password, expiresInDays })
   return response.data // { shareId, url }
 }
 
@@ -112,4 +112,20 @@ export async function downloadZip(paths, filename = 'Download.zip') {
   link.click()
   link.remove()
   window.URL.revokeObjectURL(url)
+}
+
+// 12. Get Trash Items
+export async function getTrash() {
+  const response = await api.get('/files/trash')
+  return response.data
+}
+
+// 13. Restore Trash Item
+export async function restoreTrash(trashId) {
+  await api.post('/files/trash/restore', { trashId })
+}
+
+// 14. Delete Trash Item (Empty or Specific)
+export async function deleteTrash(trashId = null) {
+  await api.delete('/files/trash', { params: trashId ? { trashId } : {} })
 }
